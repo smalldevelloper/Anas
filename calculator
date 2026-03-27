@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Calculatrice Pro</title>
+<style>
+body {
+    margin: 0;
+    background: #111;
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.calculator {
+    background: #1e1e1e;
+    border-radius: 20px;
+    padding: 20px;
+    width: 320px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.display {
+    background: #000;
+    color: #0f0;
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    min-height: 40px;
+    word-wrap: break-word;
+}
+
+.history {
+    color: #aaa;
+    font-size: 12px;
+    height: 40px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #333;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #555;
+}
+
+.operator {
+    background: #ff9500;
+}
+
+.equal {
+    background: #00c853;
+}
+
+.clear {
+    background: #d50000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <div class="history" id="history"></div>
+    <div class="display" id="display">0</div>
+
+    <div class="buttons">
+        <button onclick="clearDisplay()" class="clear">C</button>
+        <button onclick="backspace()">⌫</button>
+        <button onclick="append('(')">(</button>
+        <button onclick="append(')')">)</button>
+        <button onclick="append('/')" class="operator">÷</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button onclick="append('*')" class="operator">×</button>
+        <button onclick="append('Math.sqrt(')">√</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="append('-')" class="operator">−</button>
+        <button onclick="append('Math.pow(')">^</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button onclick="append('+')" class="operator">+</button>
+        <button onclick="append('Math.sin(')">sin</button>
+
+        <button onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+        <button onclick="calculate()" class="equal">=</button>
+        <button onclick="append('Math.cos(')">cos</button>
+        <button onclick="append('Math.tan(')">tan</button>
+    </div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+let history = document.getElementById("history");
+
+function append(value) {
+    if (display.innerText === "0") {
+        display.innerText = value;
+    } else {
+        display.innerText += value;
+    }
+}
+
+function clearDisplay() {
+    display.innerText = "0";
+}
+
+function backspace() {
+    display.innerText = display.innerText.slice(0, -1) || "0";
+}
+
+function calculate() {
+    try {
+        let expression = display.innerText;
+        let result = eval(expression);
+
+        history.innerHTML += expression + " = " + result + "<br>";
+        display.innerText = result;
+    } catch {
+        display.innerText = "Erreur";
+    }
+}
+
+// clavier
+document.addEventListener("keydown", function(e) {
+    if (!isNaN(e.key) || "+-*/().".includes(e.key)) {
+        append(e.key);
+    }
+    if (e.key === "Enter") calculate();
+    if (e.key === "Backspace") backspace();
+    if (e.key === "Escape") clearDisplay();
+});
+</script>
+
+</body>
+</html>
